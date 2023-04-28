@@ -54,7 +54,8 @@ def get_creds():
     if not creds or not creds.valid:
         # If there are no (valid) credentials available, let the user log in.
         flow = InstalledAppFlow.from_client_secrets_file('client_secret.json', SCOPES)
-        creds = flow.run_local_server(port=0)
+        # creds = flow.run_local_server(port=0)
+        creds = flow.run_console()
         st.session_state["creds"] = creds
 
     return creds
