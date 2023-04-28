@@ -3,6 +3,7 @@ from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
+from google.oauth2 import service_account
 import sqlite3
 from datetime import datetime
 from load_from_drive import extract_text_from_file
@@ -29,10 +30,10 @@ def get_gdrive_service():
     """Fetches or builds and returns a Google Drive API service instance using a service account credentials file.
 
     Returns:
-        An instance of the Google Drive API service with version v3.
+    An instance of the Google Drive API service with version v3.
 
     Raises:
-        HttpError: If an error occurs while building the API service instance.
+    HttpError: If an error occurs while building the API service instance.
     """
 
     creds = st.session_state.get("creds")
@@ -49,15 +50,11 @@ def get_gdrive_service():
 
 @st.cache_data(experimental_allow_widgets=True)
 def get_creds():
-
     creds = st.session_state.get("creds")
     if not creds or not creds.valid:
         # If there are no (valid) credentials available, let the user log in.
         flow = InstalledAppFlow.from_client_secrets_file('client_secret.json', SCOPES)
-        # auth_url, _ = flow.authorization_url(prompt='consent')
-        # st.write('Please go to this URL: {}'.format(auth_url))
         creds = flow.run_local_server(port=0)
-        # creds = flow.run_console()
         st.session_state["creds"] = creds
 
     return creds
@@ -141,14 +138,11 @@ def get_file_text():
     query = "trashed = false and '" + folder_id + "' in parents"
     results = drive_service.files().list(q=query).execute().get('files', [])
     # Print the file names
-    print('Files in folder %s:' % folder_name)
     for file in results:
         if not check_file_id_in_table(email_address,file['id']):
             text = extract_text_from_file(file['id'],creds)
-            print(text)
-            print(type(text))
             # function request to fastapi
-            url = "http://localhost:8000/upsert/"  # Replace with the actual URL of the endpoint
+            url = "http://54.86.128.1:8000/upsert/"  # Replace with the actual URL of the endpoint
             data = {
                 "input_str": f"{text}",
                 "filename": f"{file['name']}"
@@ -166,7 +160,7 @@ def get_file_text():
     
 
 def generative_search(query):
-    url = f'http://127.0.0.1:8000/vec-search/{query}'
+    url = f'http://54.86.128.1:8000/vec-search/{query}'
     headers = {'accept': 'application/json'}
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
