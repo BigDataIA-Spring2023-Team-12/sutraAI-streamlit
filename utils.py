@@ -5,6 +5,7 @@ import sqlite3
 from datetime import datetime
 from load_from_drive import extract_text_from_file
 import requests
+from bokeh.models.widgets import Div
 import webbrowser
 
 
@@ -24,11 +25,11 @@ def get_google_code():
     # Generate the authorization URL and redirect the user
     auth_url, _ = flow.authorization_url(prompt='consent')
     # js = "window.open('https://www.streamlit.io/')"  # New tab or window
-    # js = "window.location.href = 'https://www.streamlit.io/'"  # Current tab
-    # html = '<img src onerror="{}">'.format(js)
-    # div = Div(text=html)
-    # st.bokeh_chart(div)
-    st.markdown(auth_url, unsafe_allow_html=True)
+    js = "window.location.href = 'https://bigdataia-spring2023-team-12-sutraai-streamlit-main-soxlc4.streamlit.app/'"  # Current tab
+    html = '<img src onerror="{}">'.format(js)
+    div = Div(text=html)
+    st.bokeh_chart(div)
+    # st.markdown(auth_url, unsafe_allow_html=True)
     # st.write(f"{auth_url}")
     
 
