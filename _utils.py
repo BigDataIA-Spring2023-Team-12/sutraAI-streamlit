@@ -14,7 +14,7 @@ c = conn.cursor()
 
 
 
-st.secrets()
+
 # Set up the OAuth flow
 SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
 FLOW = Flow.from_client_secrets_file(
