@@ -19,7 +19,7 @@ def get_google_code():
     flow = Flow.from_client_secrets_file(
         "client_secret.json",
         scopes=scopes,
-        redirect_uri="http://localhost:8501/"
+        redirect_uri="https://bigdataia-spring2023-team-12-sutraai-streamlit-main-soxlc4.streamlit.app/"
     )
     # Generate the authorization URL and redirect the user
     auth_url, _ = flow.authorization_url(prompt='consent')
@@ -32,7 +32,7 @@ def get_creds_service(code):
     flow = Flow.from_client_secrets_file(
         "client_secret.json",
         scopes=scopes,
-        redirect_uri="http://localhost:8501/"
+        redirect_uri="https://bigdataia-spring2023-team-12-sutraai-streamlit-main-soxlc4.streamlit.app/"
     )
     flow.fetch_token(code=code)
 
