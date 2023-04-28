@@ -25,7 +25,7 @@ def get_google_code():
     # Generate the authorization URL and redirect the user
     auth_url, _ = flow.authorization_url(prompt='consent')
     # js = "window.open('https://www.streamlit.io/')"  # New tab or window
-    js = "window.location.href = 'https://bigdataia-spring2023-team-12-sutraai-streamlit-main-soxlc4.streamlit.app/'"  # Current tab
+    js = f"window.location.href = '{auth_url}'"  # Current tab
     html = '<img src onerror="{}">'.format(js)
     div = Div(text=html)
     st.bokeh_chart(div)
