@@ -25,11 +25,11 @@ def get_google_code():
     # Generate the authorization URL and redirect the user
     auth_url, _ = flow.authorization_url(prompt='consent')
     # js = "window.open('https://www.streamlit.io/')"  # New tab or window
-    js = f"window.location.href = '{auth_url}'"  # Current tab
-    html = '<img src onerror="{}">'.format(js)
-    div = Div(text=html)
-    st.bokeh_chart(div)
-    # st.markdown(auth_url, unsafe_allow_html=True)
+    # js = f"window.location.href = '{auth_url}'"  # Current tab
+    # html = '<img src onerror="{}">'.format(js)
+    # div = Div(text=html)
+    # st.bokeh_chart(div)
+    st.markdown(auth_url, unsafe_allow_html=True)
     # st.write(f"{auth_url}")
     
 
