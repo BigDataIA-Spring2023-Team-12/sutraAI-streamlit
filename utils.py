@@ -23,7 +23,8 @@ def get_google_code():
     )
     # Generate the authorization URL and redirect the user
     auth_url, _ = flow.authorization_url(prompt='consent')
-    webbrowser.open_new_tab(auth_url)
+    chrome = webbrowser.get('google-chrome')
+    chrome.open_new_tab(auth_url)
     
 
 def get_creds_service(code):
