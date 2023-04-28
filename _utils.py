@@ -4,10 +4,12 @@ from googleapiclient.discovery import build
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.oauth2 import service_account
+import google.auth
 import sqlite3
 from datetime import datetime
 from load_from_drive import extract_text_from_file
 import requests
+import webbrowser
 
 # Connect to SQLite database
 conn = sqlite3.connect("users.db")
@@ -17,47 +19,41 @@ c = conn.cursor()
 
 
 # Set up the OAuth flow
-SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
-FLOW = Flow.from_client_secrets_file(
-    "client_secret.json",
-    scopes=SCOPES,
-    redirect_uri="https://bigdataia-spring2023-team-12-sutraai-streamlit-main-sj10ez.streamlit.app/oauth2callback",
-)
+# SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
+# FLOW = Flow.from_client_secrets_file(
+#     "client_secret.json",
+#     scopes=SCOPES,
+#     redirect_uri="https://bigdataia-spring2023-team-12-sutraai-streamlit-main-sj10ez.streamlit.app/oauth2callback",
+# )
 
+def get_google_code():
+    scopes = ["https://www.googleapis.com/auth/drive.readonly"]
+    flow = Flow.from_client_secrets_file(
+        "client_secret.json",
+        scopes=scopes,
+        redirect_uri="http://localhost:8501/"
+    )
+    # Generate the authorization URL and redirect the user
+    auth_url, _ = flow.authorization_url(prompt='consent')
+    webbrowser.open(auth_url)
+    
 
 @st.cache_data(experimental_allow_widgets=True)
-def get_gdrive_service():
-    """Fetches or builds and returns a Google Drive API service instance using a service account credentials file.
+def get_creds_service(code):
+    # Get the authorization code from the user and exchange it for an access token
+    scopes = ["https://www.googleapis.com/auth/drive.readonly"]
+    flow = Flow.from_client_secrets_file(
+        "client_secret.json",
+        scopes=scopes,
+        redirect_uri="http://localhost:8501/"
+    )
+    flow.fetch_token(code=code)
 
-    Returns:
-    An instance of the Google Drive API service with version v3.
-
-    Raises:
-    HttpError: If an error occurs while building the API service instance.
-    """
-
-    creds = st.session_state.get("creds")
-    if not creds or not creds.valid:
-        # If there are no (valid) credentials available, let the user log in.
-        flow = InstalledAppFlow.from_client_secrets_file('client_secret.json', SCOPES)
-        creds = flow.run_local_server(port=0)
-        st.session_state["creds"] = creds
-
-    # Build the Google Drive API service instance
+    # Use the access token to build a Drive API service instance
+    creds = flow.credentials
     service = build('drive', 'v3', credentials=creds)
-    return service
 
-
-@st.cache_data(experimental_allow_widgets=True)
-def get_creds():
-    creds = st.session_state.get("creds")
-    if not creds or not creds.valid:
-        # If there are no (valid) credentials available, let the user log in.
-        flow = InstalledAppFlow.from_client_secrets_file('client_secret.json', SCOPES)
-        creds = flow.run_local_server(port=0)
-        st.session_state["creds"] = creds
-
-    return creds
+    return creds, service
 
 
 
@@ -118,9 +114,7 @@ def add_user_info(email, file_id):
     
 
 
-def get_file_text():
-    creds=get_creds()
-    drive_service = get_gdrive_service()
+def get_file_text(creds, drive_service):
     folder_name = "SutraAI"
     # Find the folder ID
     query1 = f"mimeType='application/vnd.google-apps.folder' and trashed = false and name='{folder_name}'" 

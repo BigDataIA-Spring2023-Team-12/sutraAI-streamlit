@@ -1,19 +1,12 @@
 import streamlit as st
 import os
 from googleapiclient.errors import HttpError
-from _utils import get_file_text, generative_search
+from _utils import get_file_text, generative_search, get_creds_service, get_google_code
 from google_auth_oauthlib.flow import Flow
 
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
-# Set up the OAuth flow
-SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
-FLOW = Flow.from_client_secrets_file(
-    "client_secret.json",
-    scopes=SCOPES,
-    redirect_uri="urn:ietf:wg:oauth:2.0:oob",
-)
 
 
 
@@ -25,40 +18,35 @@ def main():
     '''
 
     # Set page title and layout
-    st.set_page_config(page_title="SutraAI", layout="wide")
+    st.set_page_config(page_title="SutraAI")
 
     # create_users_table()
+    st.markdown(md_text)
+    st.header("Connect to Google Drive 📁")
 
-    menu_selection = st.sidebar.selectbox("Select an option", ["Home", "Access Drive"])
+    if st.button("Authorize 🔑"):
+        get_google_code()
+    
+    code  = st.text_input("Enter Authorization Code 🔑")
+    st.header("Upload files! 📤")
 
-    if menu_selection == "Home":
-        st.markdown(md_text)
+    if st.button("Upload Files 📥"):
+        creds, service = get_creds_service(code)
+        get_file_text(creds,service)
 
-    elif menu_selection == "Access Drive":
+    st.markdown("---")
+    st.header("Query Important Information 🕵️‍♀️")
 
-        st.header("Connect to Google Drive")
-        selection = st.selectbox("Choose an option", ["Select an action","Extract text from files"])
+    # Text box for user input
+    query = st.text_input("Enter your query here 🔍")
 
-        if selection == "Extract text from files":
-            get_file_text()
+    # Submit button
+    if st.button("Search 🔎"):
+        generative_search(query)
             
+        
 
-        st.markdown("---")
-        st.header("Query Important Information")
-
-        # Text box for user input
-        query = st.text_input("Enter your query here")
-
-        # Submit button
-        if st.button("Search"):
-            generative_search(query)
-                
-            
-
-        st.markdown("---")
-
-    else:
-        st.warning("Please log in to access Google Drive and search functionality.")
+    st.markdown("---")
 
 
 if __name__ == "__main__":
