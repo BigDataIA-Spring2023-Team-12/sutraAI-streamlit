@@ -18,7 +18,7 @@ c = conn.cursor()
 # Set up the OAuth flow
 SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
 FLOW = Flow.from_client_secrets_file(
-    st.secrets["client_secret.json"],
+    "client_secret.json",
     scopes=SCOPES,
     redirect_uri="urn:ietf:wg:oauth:2.0:oob",
 )
