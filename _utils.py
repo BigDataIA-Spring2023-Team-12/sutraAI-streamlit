@@ -1,30 +1,18 @@
 import streamlit as st
 from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.oauth2 import service_account
-import google.auth
 import sqlite3
 from datetime import datetime
 from load_from_drive import extract_text_from_file
 import requests
 import webbrowser
 
+
 # Connect to SQLite database
 conn = sqlite3.connect("users.db")
 c = conn.cursor()
 
 
-
-
-# Set up the OAuth flow
-# SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
-# FLOW = Flow.from_client_secrets_file(
-#     "client_secret.json",
-#     scopes=SCOPES,
-#     redirect_uri="https://bigdataia-spring2023-team-12-sutraai-streamlit-main-sj10ez.streamlit.app/oauth2callback",
-# )
 
 def get_google_code():
     scopes = ["https://www.googleapis.com/auth/drive.readonly"]
@@ -38,7 +26,6 @@ def get_google_code():
     webbrowser.open(auth_url)
     
 
-@st.cache_data(experimental_allow_widgets=True)
 def get_creds_service(code):
     # Get the authorization code from the user and exchange it for an access token
     scopes = ["https://www.googleapis.com/auth/drive.readonly"]
