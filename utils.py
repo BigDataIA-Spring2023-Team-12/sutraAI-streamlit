@@ -23,7 +23,7 @@ def get_google_code():
     )
     # Generate the authorization URL and redirect the user
     auth_url, _ = flow.authorization_url(prompt='consent')
-    st.write(auth_url)
+    st.write(f"{auth_url}")
     
 
 def get_creds_service(code):
