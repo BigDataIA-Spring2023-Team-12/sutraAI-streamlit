@@ -23,7 +23,7 @@ def get_google_code():
         redirect_uri="https://bigdataia-spring2023-team-12-sutraai-streamlit-main-soxlc4.streamlit.app/"
     )
     # Generate the authorization URL and redirect the user
-    auth_url, _ = flow.authorization_url(access_type='offline', prompt='consent')
+    auth_url, _ = flow.authorization_url(access_type='online', prompt='consent')
     # js = "window.open('https://www.streamlit.io/')"  # New tab or window
     # js = f"window.location.href = '{auth_url}'"  # Current tab
     # html = '<img src onerror="{}">'.format(js)
