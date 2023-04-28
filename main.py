@@ -2,7 +2,7 @@ import streamlit as st
 import os
 from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import Flow
-from _utils import get_file_text, get_creds_service, get_google_code, generative_search
+from utils import get_file_text, get_creds_service, get_google_code, generative_search
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
