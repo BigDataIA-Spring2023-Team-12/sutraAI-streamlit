@@ -8,39 +8,19 @@ os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 
 def main():
-    md_text = '''
-    # 🚀 SutraAI: Building a Smart Query Tool for Querying Multiple Documents 📚
-     
-     👋 In today's world, there is a lot of textual data present in various formats, and accessing the required information from this data can be a challenging task. The proposed project aims to build a 🔍 smart query tool that can query multiple documents and retrieve the relevant information based on user input queries. 
-    '''
 
     # Set page title and layout
     st.set_page_config(page_title="SutraAI")
 
-    # create_users_table()
-    st.markdown(md_text)
-    st.header("Connect to Google Drive 📁")
+    st.title("On-site Planning")
+    st.header("Query Important Information 🕵️‍♀️")
 
-    if st.button("Authorize 🔑"):
-        get_google_code()
-    
-    code  = st.text_input("Enter Authorization Code 🔑")
-    if code:
-        st.header("Upload files! 📤")
+    # Text box for user input
+    query = st.text_input("Enter your query here 🔍")
 
-        if st.button("Upload Files 📥"):
-            creds, service = get_creds_service(code)
-            get_file_text(creds,service)
-
-        st.markdown("---")
-        st.header("Query Important Information 🕵️‍♀️")
-
-        # Text box for user input
-        query = st.text_input("Enter your query here 🔍")
-
-        # Submit button
-        if st.button("Search 🔎"):
-            generative_search(query)
+    # Submit button
+    if st.button("Ask"):
+        generative_search(query)
             
         
 
