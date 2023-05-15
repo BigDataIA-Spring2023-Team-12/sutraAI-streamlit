@@ -1,7 +1,5 @@
 import streamlit as st
 import os
-from googleapiclient.errors import HttpError
-from google_auth_oauthlib.flow import Flow
 from utils import get_file_text, get_creds_service, get_google_code, generative_search
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
@@ -27,21 +25,22 @@ def main():
         get_google_code()
     
     code  = st.text_input("Enter Authorization Code 🔑")
-    st.header("Upload files! 📤")
+    if code:
+        st.header("Upload files! 📤")
 
-    if st.button("Upload Files 📥"):
-        creds, service = get_creds_service(code)
-        get_file_text(creds,service)
+        if st.button("Upload Files 📥"):
+            creds, service = get_creds_service(code)
+            get_file_text(creds,service)
 
-    st.markdown("---")
-    st.header("Query Important Information 🕵️‍♀️")
+        st.markdown("---")
+        st.header("Query Important Information 🕵️‍♀️")
 
-    # Text box for user input
-    query = st.text_input("Enter your query here 🔍")
+        # Text box for user input
+        query = st.text_input("Enter your query here 🔍")
 
-    # Submit button
-    if st.button("Search 🔎"):
-        generative_search(query)
+        # Submit button
+        if st.button("Search 🔎"):
+            generative_search(query)
             
         
 
